@@ -1,0 +1,27 @@
+# GraphQL data model for Prisma
+#
+# Anytime this schema is updated you need to deploy it to Prisma via:
+#
+#   npm run deploy
+#
+# The post-deploy hoot (prisma.yml) automatically downloads the new generated
+# Prisma GraphQL schema at src/generated/prisma.graphql that is the schema
+# that our Yoga server can talk to the Prisma layer with.
+
+type User {
+  id: ID! @id
+  name: String!
+  email: String!
+}
+
+type Item {
+  id: ID! @id
+  title: String!
+  description: String!
+  image: String
+  largeImage: String
+  price: Int!
+  # createdAt: DateTime! # custom type provided by prisma
+  # updatedAt: DateTime!
+  # user: User! # TODO
+}
