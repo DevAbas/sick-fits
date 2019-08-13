@@ -8,10 +8,23 @@
 # Prisma GraphQL schema at src/generated/prisma.graphql that is the schema
 # that our Yoga server can talk to the Prisma layer with.
 
+enum Permission {
+  ADMIN
+  USER
+  ITEMCREATE
+  ITEMUPDATE
+  ITEMDELETE
+  PERMISSIONUPDATE
+}
+
 type User {
-  id: ID! @id
+  id: ID! @id @unique
   name: String!
-  email: String!
+  email: String! @unique
+  password: String!
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: [Permission] @scalarList(strategy: RELATION)
 }
 
 type Item {
@@ -21,7 +34,7 @@ type Item {
   image: String
   largeImage: String
   price: Int!
-  # createdAt: DateTime! # custom type provided by prisma
+  createdAt: DateTime! # custom type provided by prisma
   # updatedAt: DateTime!
   # user: User! # TODO
 }

@@ -1,5 +1,3 @@
-import Items from '../components/Items';
+import Items from './index';
 
-const items = () => <Items />;
-
-export default items;
+export default Items;
