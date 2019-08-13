@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
+
 const mutations = {
   async createItem(parent, args, ctx, info) {
     const item = await ctx.db.mutation.createItem(
@@ -49,16 +51,55 @@ const mutations = {
       },
       info
     );
-    // create the JWT token for them
-    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-    // we set the jwt as a cookie on the response
-    ctx.response.cookie('token', token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year cookie
+    // check jwt
+    const token = generateToken(user);
+
+    // set cookie with token
+    setCookie(token, ctx);
+
+    // return user
+    return user;
+  },
+  async signin(parent, { email, password }, ctx, info) {
+    // check if there's a user with that email
+    const user = await ctx.db.query.user({
+      where: {
+        email,
+      },
     });
-    // Finalllly return the user to the browser
+    if (!user) throw new Error(`There is no user with this email ${email}`);
+    console.log('PASSWORD ON BACK END', password, user.password);
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) throw new Error('Invalid password');
+    // check jwt
+    const token = generateToken(user);
+
+    // set cookie with token
+    setCookie(token, ctx);
+
+    // return user
     return user;
   },
 };
+
+function generateToken(user) {
+  // create a JWT for the user
+  return jwt.sign(
+    {
+      userId: user.id,
+    },
+    process.env.APP_SECRET
+  );
+}
+
+function setCookie(token, ctx) {
+  // set the JWT as a cookie on the response
+  // httpOnly - makes sure one cannot access the token via JS (through 3rd party extension, rogue Chrome ext, etc)
+  // maxAge - how long the cookie lasts
+  ctx.response.cookie('token', token, {
+    httpOnly: true,
+    maxAge: ONE_YEAR,
+  });
+}
 
 module.exports = mutations;

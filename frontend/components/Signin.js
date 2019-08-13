@@ -5,13 +5,9 @@ import { CURRENT_USER_QUERY } from './User';
 import Error from './ErrorMessage';
 import Form from './styles/Form';
 
-const SIGNUP_MUTATION = gql`
-  mutation SIGNUP_MUTATION(
-    $name: String!
-    $email: String!
-    $password: String!
-  ) {
-    signup(name: $name, email: $email, password: $password) {
+const SIGNIN_MUTATION = gql`
+  mutation SIGNIN_MUTATION($email: String!, $password: String!) {
+    signin(email: $email, password: $password) {
       id
       email
       name
@@ -19,39 +15,27 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
-const Signup = () => {
-  const [name, setName] = useState('');
+const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const varsForMutation = { name, email, password };
+  const varsForMutation = { email, password };
   return (
     <Mutation
-      mutation={SIGNUP_MUTATION}
+      mutation={SIGNIN_MUTATION}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
       variables={{ ...varsForMutation }}>
-      {(signup, { error, loading }) => (
+      {(signin, { error, loading }) => (
         <Form
           method='post'
           onSubmit={async e => {
             e.preventDefault();
-            await signup();
-            setName('');
+            await signin();
             setEmail('');
             setPassword('');
           }}>
           <fieldset disabled={loading} aria-busy={loading}>
-            <h2>Sign Up for An Account</h2>
+            <h2>Sign to into your Account</h2>
             <Error error={error} />
-            <label htmlFor='name'>
-              Name
-              <input
-                type='text'
-                name='name'
-                placeholder='Your name'
-                value={name}
-                onChange={e => setName(e.target.value)}
-              />
-            </label>
             <label htmlFor='name'>
               Email
               <input
@@ -72,7 +56,7 @@ const Signup = () => {
                 onChange={e => setPassword(e.target.value)}
               />
             </label>
-            <button type='submit'>Sign Up!</button>
+            <button type='submit'>Sign In!</button>
           </fieldset>
         </Form>
       )}
@@ -80,4 +64,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Signin;
