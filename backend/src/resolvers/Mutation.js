@@ -68,7 +68,6 @@ const mutations = {
       },
     });
     if (!user) throw new Error(`There is no user with this email ${email}`);
-    console.log('PASSWORD ON BACK END', password, user.password);
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) throw new Error('Invalid password');
     // check jwt
@@ -79,6 +78,10 @@ const mutations = {
 
     // return user
     return user;
+  },
+  signout(parent, args, ctx, info) {
+    ctx.response.clearCookie('token');
+    return { message: 'Goodbye!' };
   },
 };
 
