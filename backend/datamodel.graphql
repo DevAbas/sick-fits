@@ -34,7 +34,6 @@ type Item {
   image: String
   largeImage: String
   price: Int!
-  createdAt: DateTime! # custom type provided by prisma
-  # updatedAt: DateTime!
-  # user: User! # TODO
+  user: User! # TODO
+  createdAt: DateTime!
 }
