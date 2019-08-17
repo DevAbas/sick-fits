@@ -36,7 +36,7 @@ const Signin = () => {
           <fieldset disabled={loading} aria-busy={loading}>
             <h2>Sign to into your Account</h2>
             <Error error={error} />
-            <label htmlFor='name'>
+            <label htmlFor='email'>
               Email
               <input
                 type='email'
@@ -46,7 +46,7 @@ const Signin = () => {
                 onChange={e => setEmail(e.target.value)}
               />
             </label>
-            <label htmlFor='name'>
+            <label htmlFor='password'>
               Password
               <input
                 type='password'

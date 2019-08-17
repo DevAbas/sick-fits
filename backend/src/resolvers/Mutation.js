@@ -98,7 +98,7 @@ const mutations = {
       data: { resetToken, resetTokenExpiry },
     });
     console.log(res);
-    return { message: 'Good boooyy' };
+    return { message: 'Check your email address to reset password' };
   },
 
   async resetPassword(parent, args, ctx, info) {
