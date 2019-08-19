@@ -34,6 +34,6 @@ type Item {
   image: String
   largeImage: String
   price: Int!
-  user: User! # TODO
-  createdAt: DateTime!
+  user: User!
+  createdAt: DateTime
 }

@@ -13,7 +13,7 @@ const DELETE_ITEM_MUTATION = gql`
 const DeleteItem = props => {
   const deleteItemHandler = async deleteItemMutation => {
     if (confirm('Are you sure for that')) {
-      await deleteItemMutation();
+      await deleteItemMutation().catch(error => alert(error));
     }
   };
   const update = (cache, payload) => {
